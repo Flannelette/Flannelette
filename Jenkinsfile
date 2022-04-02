@@ -3,7 +3,7 @@ pipeline {
     environment {
       registry = 'flannelette/training-project'
       //registry = 'https://hub.docker.com/repository/docker/flannelette/training-project'
-      credentialsId = 'dockerhub-flannelette'
+      dockerhubcred = credentials('dockerhub-flannelette')
       dockerImage = ''
     }
 
@@ -33,6 +33,7 @@ pipeline {
         }
         stage('Push Img to Docker Hub') {
             steps {
+		    sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
 		    script {
 			docker.withRegistry('', credentialsID){
 				dockerImage.push()
