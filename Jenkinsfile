@@ -31,14 +31,16 @@ pipeline {
                 //sh 'docker tag demowebapp flannelette/demowebapp:latest'
             }
         }
-        stage('Login to Docker Hub') {
-            steps {
-		    sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
-	    }
-        }
+        //stage('Login to Docker Hub') {
+        //    steps {
+	//	    sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
+	//    }
+        //}
         stage('Push Img to Docker Hub') {
             steps {
-		  sh 'docker push registry + ":$BUILD_NUMBER"'
+		    withDockerRegistry([credentialsId: "dockerhubcred", url: "https://hub.docker.com/repository/docker/flannelette/training-project"]){
+		    	sh 'docker push registry + ":$BUILD_NUMBER"'
+		    }
 	    }
 	}
 	stage('Run Docker Container on Jenkins') {
