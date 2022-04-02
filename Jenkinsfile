@@ -40,12 +40,12 @@ pipeline {
 	}
 	stage('Run Docker Container on Jenkins') {
             steps {
-                sh "docker run -d -p 8003:8000 dockerImage"
+                sh "docker run -d -p 8003:8000 flannelette/training-project"
             }
         }
         stage('Run Docker Container on Production') {
             steps {
-                sh "docker -H ssh://ubuntu@ec2-52-87-243-9.compute-1.amazonaws.com 8003:8000 docerkImage"
+                sh "docker -H ssh://ubuntu@ec2-52-87-243-9.compute-1.amazonaws.com 8003:8000 flannelette/training-project"
             }
         }
     }
