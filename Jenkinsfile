@@ -31,18 +31,17 @@ pipeline {
                 //sh 'docker tag demowebapp flannelette/demowebapp:latest'
             }
         }
-        stage('Push Img to Docker Hub') {
+        stage('Login to Docker Hub') {
             steps {
-		    //sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
-		    script {
-			docker.withRegistry('', dockerhubcred){
-				dockerImage.push()
-		    	}
-		    }
-		//withDockerRegistry([registry, dockerhubcred]){sh 'docker push flannelette/demowebapp:latest'}
+		    sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
 	    }
         }
-        stage('Run Docker Container on Jenkins') {
+        stage('Push Img to Docker Hub') {
+            steps {
+		  sh 'docker push registry + ":$BUILD_NUMBER"'
+	    }
+	}
+	stage('Run Docker Container on Jenkins') {
             steps {
                 sh "docker run -d -p 8003:8000 flannelette/demowebapp"
             }
