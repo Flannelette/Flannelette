@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Code Scan') {
             steps {
-                sh 'mvn =P metrics pmd:pmd'             
+                sh 'mvn -P metrics pmd:pmd'             
             }
         }
         stage('Docker Build and Tag') {
