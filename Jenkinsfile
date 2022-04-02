@@ -1,8 +1,8 @@
 
 pipeline {
     environment {
-      registry = 'flannelette/training-project'
       //registry = 'https://hub.docker.com/repository/docker/flannelette/training-project'
+      registry = 'flannelette/training-project'
       registrycred = 'dockerhub-flannelette'
       dockerImage = ''
     }
@@ -27,15 +27,8 @@ pipeline {
         stage('Docker Build') {
             steps {
 		script {dockerImage = docker.build registry + ":$BUILD_NUMBER"}
-		//sh 'docker build -t flannelette/demowebapp:latest .' 
-                //sh 'docker tag demowebapp flannelette/demowebapp:latest'
             }
         }
-        //stage('Login to Docker Hub') {
-        //    steps {
-	//	    sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
-	//    }
-        //}
         stage('Push Img to Docker Hub') {
             steps {
 		    script {
