@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Docker Build') {
             steps {
-		script {dockerImage = docker.build registry + ":$BUILD_NUMBER"}
+		script {dockerImage = docker.build registry + ":latest"}
             }
         }
         stage('Push Img to Docker Hub') {
@@ -40,12 +40,12 @@ pipeline {
 	}
 	stage('Run Docker Container on Jenkins') {
             steps {
-                sh "docker run -d -p 8003:8000 flannelette/training-project"
+                sh "docker run -d -p 8003:8000 flannelette/training-project:latest"
             }
         }
         stage('Run Docker Container on Production') {
             steps {
-                sh "docker -H ssh://ubuntu@ec2-52-87-243-9.compute-1.amazonaws.com 8003:8000 flannelette/training-project"
+                sh "docker -H ssh://ubuntu@ec2-52-87-243-9.compute-1.amazonaws.com 8003:8000 flannelette/training-project:latest"
             }
         }
     }
