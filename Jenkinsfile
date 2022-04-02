@@ -3,7 +3,7 @@ pipeline {
     environment {
       registry = 'flannelette/training-project'
       //registry = 'https://hub.docker.com/repository/docker/flannelette/training-project'
-      dockerhubcred = credentials('dockerhub-flannelette')
+      dockerhubcred = 'dockerhub-flannelette'
       dockerImage = ''
     }
 
@@ -33,13 +33,13 @@ pipeline {
         }
         stage('Push Img to Docker Hub') {
             steps {
-		    sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
+		    //sh 'echo $dockerhubcred_PSW | docker login -u $dockerhubcred_USR --password-stdin'
 		    script {
-			docker.withRegistry('', credentialsID){
+			docker.withRegistry('', dockerhubcred){
 				dockerImage.push()
 		    	}
 		    }
-		//withDockerRegistry([registry, credentialsID]){sh 'docker push flannelette/demowebapp:latest'}
+		//withDockerRegistry([registry, dockerhubcred]){sh 'docker push flannelette/demowebapp:latest'}
 	    }
         }
         stage('Run Docker Container on Jenkins') {
