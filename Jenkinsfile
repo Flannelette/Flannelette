@@ -1,7 +1,8 @@
 
 pipeline {
     environment {
-      registry = 'https://hub.docker.com/repository/docker/flannelette/training-project'
+      registry = 'flannelette/training-project'
+      //registry = 'https://hub.docker.com/repository/docker/flannelette/training-project'
       credentialsId = 'dockerhub-flannelette'
       dockerImage = ''
     }
@@ -25,16 +26,19 @@ pipeline {
         }
         stage('Docker Build') {
             steps {
-		//script {dockerImage = docker.build registry + ":$BUILD_NUMBER"}
-		sh 'docker build -t flannelette/demowebapp:latest .' 
+		script {dockerImage = docker.build registry + ":$BUILD_NUMBER"}
+		//sh 'docker build -t flannelette/demowebapp:latest .' 
                 //sh 'docker tag demowebapp flannelette/demowebapp:latest'
             }
         }
         stage('Push Img to Docker Hub') {
             steps {
-                withDockerRegistry([registry, credentialsID]){
-			sh 'docker push flannelette/demowebapp:latest'
-		}
+		    script {
+			docker.withRegistry('', credentialsID){
+				dockerImage.push()
+		    	}
+		    }
+		//withDockerRegistry([registry, credentialsID]){sh 'docker push flannelette/demowebapp:latest'}
 	    }
         }
         stage('Run Docker Container on Jenkins') {
