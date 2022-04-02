@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Push Img to Docker Hub') {
             steps {
-                withDockerRegistry(registry, credentialsID){
+                withDockerRegistry([registry, credentialsID]){
 			sh 'docker push flannelette/demowebapp:latest'
 		}
 	    }
