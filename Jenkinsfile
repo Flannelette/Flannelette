@@ -24,9 +24,8 @@ pipeline {
         }
         stage('Publish image to Docker Hub') {
             steps {
-                withDockerRegistry([ credentialsId: "dockerhub-flannelette", url: "hub.docker.com/repository/docker/flannelette/training-project" ]) {
-                sh  'docker push flannelette/demowebapp:latest'
-                }
+                withDockerRegistry([url: "hub.docker.com/repository/docker/flannelette/training-project",credentialsId: "dockerhub-flannelette",])
+		sh 'docker push flannelette/demowebapp:latest'
             }
         }
         stage('Run Docker Container on Jenkins') {
