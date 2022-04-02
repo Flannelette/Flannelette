@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Publish image to Docker Hub') {
             steps {
-                withDockerRegistry([ credentialsId: "dockerHub", url: "hub.docker.com/repository/docker/flannelette/training-project" ]) {
+                withDockerRegistry([ credentialsId: "dockerhub-flannelette", url: "hub.docker.com/repository/docker/flannelette/training-project" ]) {
                 sh  'docker push flannelette/demowebapp:latest'
                 }
             }
