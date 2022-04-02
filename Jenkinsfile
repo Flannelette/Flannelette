@@ -1,11 +1,17 @@
 
 pipeline {
+    environment {
+      registry = 'https://hub.docker.com/repository/docker/flannelette/training-project'
+      credentialsId = 'dockerhub-flannelette'
+      dockerImage = ''
+    }
+
     agent any
  
     tools {
         maven "maven363"
     }
- 
+
     stages {
         stage('checkout') {
             steps {
@@ -23,14 +29,12 @@ pipeline {
                 sh 'docker tag demowebapp flannelette/demowebapp:latest'
             }
         }
-        stage('Publish image to Docker Hub') {
+        stage('Push img to Docker Hub') {
             steps {
                 script{ 
-			withDockerRegistry(credentialsId: "dockerhub-flannelette",rl: "https://hub.docker.com/repository/docker/flannelette/training-project"){
-			}
+			docker.withRegistry(demowebapp:latest, credentialsID){dockerImage.push()}
 		}
-		sh 'docker push flannelette/demowebapp:latest'
-            }
+	    }
         }
         stage('Run Docker Container on Jenkins') {
             steps {
