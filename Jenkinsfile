@@ -23,16 +23,17 @@ pipeline {
                 sh 'mvn package'             
             }
         }
-        stage('Docker Build and Tag') {
+        stage('Docker Build') {
             steps {
-                sh 'docker build -t demowebapp:latest .' 
-                sh 'docker tag demowebapp flannelette/demowebapp:latest'
+		//script {dockerImage = docker.build registry + ":$BUILD_NUMBER"}
+		sh 'docker build -t flannelette/demowebapp:latest .' 
+                //sh 'docker tag demowebapp flannelette/demowebapp:latest'
             }
         }
-        stage('Push img to Docker Hub') {
+        stage('Push Img to Docker Hub') {
             steps {
-                script{ 
-			docker.withRegistry(demowebapp:latest, credentialsID){dockerImage.push()}
+                withDockerRegistry(registry, credentialsID){
+			sh 'docker push flannelette/demowebapp:latest'
 		}
 	    }
         }
