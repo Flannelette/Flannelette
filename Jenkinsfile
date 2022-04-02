@@ -16,11 +16,6 @@ pipeline {
                 sh 'mvn package'             
             }
         }
-        stage('Code Scan') {
-            steps {
-                sh 'mvn -P metrics pmd:pmd'             
-            }
-        }
         stage('Docker Build and Tag') {
             steps {
                 sh 'docker build -t demowebapp:latest .' 
