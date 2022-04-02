@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
  
@@ -24,7 +25,10 @@ pipeline {
         }
         stage('Publish image to Docker Hub') {
             steps {
-                withDockerRegistry([url: "https://hub.docker.com/repository/docker/flannelette/training-project",credentialsId: "dockerhub-flannelette",])
+                script{ 
+			withDockerRegistry(credentialsId: "dockerhub-flannelette",rl: "https://hub.docker.com/repository/docker/flannelette/training-project"){
+			}
+		}
 		sh 'docker push flannelette/demowebapp:latest'
             }
         }
