@@ -4,6 +4,7 @@ pipeline {
       //registry = 'https://hub.docker.com/repository/docker/flannelette/training-project'
       registry = 'flannelette/training-project'
       registrycred = 'dockerhub-flannelette'
+      prodcred = 'production_key'
       dockerImage = ''
     }
 
@@ -45,7 +46,8 @@ pipeline {
         }
         stage('Run Docker Container on Production') {
             steps {
-                sh "docker -H ssh://ubuntu@ec2-54-92-173-209.compute-1.amazonaws.com run -d -p 8003:8000 flannelette/training-project:latest"
+                sh "ssh -i prodcred ubuntu@ec2-54-92-173-209.compute-1.amazonaws.com"
+		sh "docker run -d -p 8003:8000 flannelette/training-project:latest"
             }
         }
     }
