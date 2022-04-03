@@ -45,7 +45,7 @@ pipeline {
         }
         stage('Run Docker Container on Production') {
             steps {
-                sh "docker -H ssh://ubuntu@ec2-54-92-173-209.compute-1.amazonaws.com 8003:8000 flannelette/training-project:latest"
+                sh "docker -H ssh://ubuntu@ec2-54-92-173-209.compute-1.amazonaws.com run -d -p 8003:8000 flannelette/training-project:latest"
             }
         }
     }
